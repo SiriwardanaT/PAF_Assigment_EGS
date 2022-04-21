@@ -16,6 +16,7 @@ import EGSS.CustomerManagementService.modal.CustomerModal;
 @Path("customer")
 public class MyResource {
 
+	// adding customer
  
     @POST
     @Produces(MediaType.APPLICATION_JSON)
