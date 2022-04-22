@@ -16,7 +16,9 @@ public class ConsumptionService {
 		//get all consumption records
 	}
 	
-	public static String getAllConsumptions() {
+	public static String getAllConsumptions() throws ClassNotFoundException, SQLException {
+		Connection con = DbConnection.getDbConnection();
+		
 		return null;
 	}
 	
