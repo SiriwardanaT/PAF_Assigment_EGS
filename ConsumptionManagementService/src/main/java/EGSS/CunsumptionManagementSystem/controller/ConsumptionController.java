@@ -18,8 +18,8 @@ public class ConsumptionController {
 	//GET:http://localhost:8081/ConsumptionManagementService/api/admin
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return "Consumption Management system";
+    public String getIt() throws ClassNotFoundException, SQLException {
+        return ConsumptionService.getAllConsumptions();
     }
     
     
