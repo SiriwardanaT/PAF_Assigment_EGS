@@ -1,11 +1,14 @@
 package EGSS.CunsumptionManagementSystem.controller;
 
+import java.sql.SQLException;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import EGSS.CunsumptionManagementSystem.dao.ConsumptionService;
 import EGSS.CunsumptionManagementSystem.modal.Consumption;
 
 
@@ -17,13 +20,17 @@ public class ConsumptionController {
     public String getIt() {
         return "Consumption Management system";
     }
-    
-    //post:
+    //post:localhost
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public String AddNewConsupmtion(Consumption consumption) {
-    	  System.out.println(consumption.getId());
-    	  return consumption.getId();
+    public String AddNewConsupmtion(Consumption consumption) throws ClassNotFoundException, SQLException {
+    	if(consumption != null) {
+    		return ConsumptionService.AddConsmptionRecord(consumption);
+    	}
+    	else {
+    		return "Something went wrong !";
+    	}
+    	
     }
     
    
