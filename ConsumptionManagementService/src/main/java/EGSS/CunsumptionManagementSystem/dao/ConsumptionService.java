@@ -18,8 +18,34 @@ public class ConsumptionService {
 	
 	public static String getAllConsumptions() throws ClassNotFoundException, SQLException {
 		Connection con = DbConnection.getDbConnection();
+		PreparedStatement preparedStatement = con.prepareStatement("select * from consumption");
 		
-		return null;
+		ResultSet rs =  preparedStatement.executeQuery();
+		String output = "<h1>Consumption Monitoring</h1>";
+		output += "<table border='1'>";
+        output += "<tr>\r\n"
+        		+ "    <th>ConsumptionID</th>\r\n"
+        		+ "    <th>Units</th>\r\n"
+        		+ "    <th>Reading Date</th>\r\n"
+        		+ "    <th>unitPrice</th>\r\n"
+        		+ "    <th>Last Reading</th>\r\n"
+        		+ "    <th>Currunt Reading</th>\r\n"
+        		+ "    <th>Account No</th>\r\n"
+        		+ "  </tr>";
+		while(rs.next()) {
+			output += "<tr>";
+			output += "<th>"+rs.getString(1) +"</th>";
+			output += "<th>"+rs.getString(2) +"</th>";
+			output += "<th>"+rs.getString(3) +"</th>";
+			output += "<th style='color:red'>"+rs.getString(4) +"</th>";
+			output += "<th>"+rs.getString(5) +"</th>";
+			output += "<th>"+rs.getString(6) +"</th>";
+			output += "<th>"+rs.getString(7) +"</th>";
+			output += "<th>"+rs.getString(8) +"</th>";
+			output += "</tr>";
+		}
+		output += "</table>";
+		return output;
 	}
 	
 	
@@ -33,7 +59,7 @@ public class ConsumptionService {
 		else {
 			int lastReading = getLastReading(consumption.getMacc());
 			if(lastReading < consumption.getCurruntReading()) {
-				PreparedStatement preparedStatement =  con.prepareStatement("insert into consumption(units,date,unitPrice,lsReading,cuReading,Macc,status,createBy,createDate,modifiedBy,modifiedDate)  values(?,?,?,?,?,?,?,?,?,?,?)");
+				PreparedStatement preparedStatement =  con.prepareStatement("insert into consumption (units,date,unitPrice,lsReading,cuReading,Macc,status,createBy,createDate,modifiedBy,modifiedDate)  values(?,?,?,?,?,?,?,?,?,?,?)");
 				preparedStatement.setDouble(1,consumption.getUnits());
 				preparedStatement.setString(2, consumption.getDate());
 				preparedStatement.setDouble(3, consumption.getUnitPrice());
@@ -61,6 +87,12 @@ public class ConsumptionService {
 		
 			
 		}
+		
+	}
+	
+	public static String SearchConsumptionByAcc(String Acc) throws ClassNotFoundException, SQLException {
+		Connection con = DbConnection.getDbConnection();
+		PreparedStatement preparedStatement =  con.prepareStatement("select * from where Macc = ?");
 		
 	}
 	
