@@ -92,8 +92,34 @@ public class ConsumptionService {
 	
 	public static String SearchConsumptionByAcc(String Acc) throws ClassNotFoundException, SQLException {
 		Connection con = DbConnection.getDbConnection();
-		PreparedStatement preparedStatement =  con.prepareStatement("select * from where Macc = ?");
-		
+		PreparedStatement preparedStatement =  con.prepareStatement("select * from consumption where Macc like ?");
+		preparedStatement.setString(1, Acc);
+		ResultSet rs =  preparedStatement.executeQuery();
+		String output = "<h3>Consumption Monitoring In " + Acc + "</h3>";
+		output += "<table border='1'>";
+		output += "<tr>\r\n"
+	        		+ "    <th>ConsumptionID</th>\r\n"
+	        		+ "    <th>Units</th>\r\n"
+	        		+ "    <th>Reading Date</th>\r\n"
+	        		+ "    <th>unitPrice</th>\r\n"
+	        		+ "    <th>Last Reading</th>\r\n"
+	        		+ "    <th>Currunt Reading</th>\r\n"
+	        		+ "    <th>Account No</th>\r\n"
+	        		+ "  </tr>";
+		while(rs.next()) {
+			output += "<tr>";
+			output += "<th>"+rs.getString(1) +"</th>";
+			output += "<th>"+rs.getString(2) +"</th>";
+			output += "<th>"+rs.getString(3) +"</th>";
+			output += "<th style='color:red'>"+rs.getString(4) +"</th>";
+			output += "<th style='color:green'>"+rs.getString(5) +"</th>";
+			output += "<th>"+rs.getString(6) +"</th>";
+			output += "<th>"+rs.getString(7) +"</th>";
+			output += "<th>"+rs.getString(8) +"</th>";
+			output += "</tr>";
+		}
+		output += "</table>";
+		return output;
 	}
 	
 	public static int getLastReading(String Macc) throws ClassNotFoundException, SQLException{
