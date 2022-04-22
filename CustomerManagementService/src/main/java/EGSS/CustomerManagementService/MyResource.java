@@ -1,25 +1,34 @@
 package EGSS.CustomerManagementService;
 
-import javax.ws.rs.GET;
+import java.sql.SQLException;
+
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-/**
- * Root resource (exposed at "myresource" path)
- */
-@Path("myresource")
+import EGSS.CustomerManagementService.contoller.CustomerController;
+import EGSS.CustomerManagementService.modal.CustomerModal;
+
+
+@Path("customer")
 public class MyResource {
 
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
-     */
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return "Customer Management system";
-    }
+	// adding customer
+ 
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addCus(CustomerModal customer) throws ClassNotFoundException, SQLException {
+   	 System.out.println(customer);
+   	 CustomerModal addCustomerToDB = CustomerController.addCustomer(customer);
+   	 if(addCustomerToDB != null) {
+   		 return Response.status(Status.CREATED).entity(addCustomerToDB).build();
+   	 }
+   	 else {
+   		 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(null).build();
+   	 }
+   	 
+   }
 }
