@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -34,6 +35,13 @@ public class ConsumptionController {
     		return "Something went wrong !";
     	}
     	
+    }
+    
+    @Path("{Acc}")
+    @GET
+    public String SearchConsumption(@PathParam("Acc") String acc) throws ClassNotFoundException, SQLException {
+    	
+    	return ConsumptionService.SearchConsumptionByAcc(acc);
     }
     
     
