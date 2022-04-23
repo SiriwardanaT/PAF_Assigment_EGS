@@ -4,11 +4,11 @@ import java.sql.Date;
 
 public class CustomerModal {
 	
-	private int id;
+	public int id;
 	private String firstName;
 	private String lastName;
 	private String NIC;
-	private String email;
+	public String email;
 	private String Street;
 	private String state;
 	private String postalCode;
@@ -17,6 +17,9 @@ public class CustomerModal {
 	private Date createdDate;
 	private int modifiedBy;
 	private Date modifiedDate;
+	private int userId;
+	private String role;
+	private String password;
 	public CustomerModal() {
 		super();
 	}
@@ -27,7 +30,7 @@ public class CustomerModal {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		NIC = nIC;
+		NIC = NIC;
 		this.email = email;
 		Street = street;
 		this.state = state;
@@ -37,6 +40,33 @@ public class CustomerModal {
 		this.createdDate = createdDate;
 		this.modifiedBy = modifiedBy;
 		this.modifiedDate = modifiedDate;
+	}
+	public CustomerModal(String firstName, String lastName, String NIC, String email, String street, String state,
+			String postalCode, boolean status) {
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+		NIC = NIC;
+		this.email = email;
+		Street = street;
+		this.state = state;
+		this.postalCode = postalCode;
+		this.status = status;
+		// TODO Auto-generated constructor stub
+	}
+	
+	public CustomerModal(int id , String firstName, String lastName, String NIC, String email, String street, String state,
+			String postalCode, boolean status) {
+		// TODO Auto-generated constructor stub
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		NIC = NIC;
+		this.email = email;
+		Street = street;
+		this.state = state;
+		this.postalCode = postalCode;
+		this.status = status;
 	}
 	public int getId() {
 		return id;
@@ -115,6 +145,10 @@ public class CustomerModal {
 	}
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
+	}
+	public String getRole() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
