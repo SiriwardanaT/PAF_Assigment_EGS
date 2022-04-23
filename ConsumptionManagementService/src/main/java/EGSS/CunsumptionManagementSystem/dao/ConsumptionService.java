@@ -122,6 +122,28 @@ public class ConsumptionService {
 		return output;
 	}
 	
+	public static String deleteConsumptionRecord(String Acc,String date) throws ClassNotFoundException, SQLException {
+		Connection con = DbConnection.getDbConnection();
+		if(con == null) {
+			return Constant.ConnectionERR;
+		}
+		else {
+			PreparedStatement preparedStatement =  con.prepareStatement("delete from consumption where Macc = ? and date = ?");
+			preparedStatement.setString(1, Acc);
+			preparedStatement.setString(2, date);
+			int res = preparedStatement.executeUpdate();
+			System.out.println(res);
+			String output = "";
+			if(res == 1) {
+				
+				return output = "Deleted Successfully";
+			}
+			else {
+				return output = "Not Deleted";
+			}
+		}
+	}
+	
 	public static int getLastReading(String Macc) throws ClassNotFoundException, SQLException{
 		Connection con = DbConnection.getDbConnection();
 		if(con == null) {
