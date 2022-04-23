@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 import EGSS.CunsumptionManagementSystem.modal.Consumption;
 import EGSS.CunsumptionManagementSystem.utils.Constant;
 import EGSS.CunsumptionManagementSystem.utils.DbConnection;
@@ -60,7 +61,7 @@ public class ConsumptionService {
 			int lastReading = getLastReading(consumption.getMacc());
 			if(lastReading < consumption.getCurruntReading()) {
 				PreparedStatement preparedStatement =  con.prepareStatement("insert into consumption (units,date,unitPrice,lsReading,cuReading,Macc,status,createBy,createDate,modifiedBy,modifiedDate)  values(?,?,?,?,?,?,?,?,?,?,?)");
-				preparedStatement.setDouble(1,consumption.getUnits());
+				preparedStatement.setDouble(1,calulateUnits(consumption.getMacc(),consumption.getCurruntReading()));
 				preparedStatement.setString(2, consumption.getDate());
 				preparedStatement.setDouble(3, consumption.getUnitPrice());
 				preparedStatement.setInt(4,getLastReading(consumption.getMacc()));
@@ -122,6 +123,41 @@ public class ConsumptionService {
 		return output;
 	}
 	
+	public static String deleteConsumptionRecord(String Acc,String date) throws ClassNotFoundException, SQLException {
+		Connection con = DbConnection.getDbConnection();
+		if(con == null) {
+			return Constant.ConnectionERR;
+		}
+		else {
+			PreparedStatement preparedStatement =  con.prepareStatement("delete from consumption where Macc = ? and date = ?");
+			preparedStatement.setString(1, Acc);
+			preparedStatement.setString(2, date);
+			int res = preparedStatement.executeUpdate();
+			System.out.println(res);
+			String output = "";
+			if(res == 1) {
+				
+				return output = "Deleted Successfully";
+			}
+			else {
+				return output = "Not Deleted";
+			}
+		}
+	}
+	
+//	public static String updateConsumption(Consumption consumption, int id) throws ClassNotFoundException, SQLException {
+//		Connection con = DbConnection.getDbConnection();
+//		if(con == null) {
+//			return Constant.ConnectionERR;
+//		}
+//		else {
+//			PreparedStatement preparedStatement =  con.prepareStatement("update consumption set  ");
+//			
+//		}
+//	}
+	
+	
+	// helper methods
 	public static int getLastReading(String Macc) throws ClassNotFoundException, SQLException{
 		Connection con = DbConnection.getDbConnection();
 		if(con == null) {
@@ -141,19 +177,27 @@ public class ConsumptionService {
 		
 	}
 	
+	public static double calulateUnits(String Macc,int currentReading) throws ClassNotFoundException, SQLException {
+			int last = getLastReading(Macc);
+			double units = currentReading -  last;
+		    return units;
+	}
+	
+	
 	public static void main(String [] args) throws ClassNotFoundException, SQLException {
-		Consumption consumption = new Consumption();
-		consumption.setUnits(800.99);
-		consumption.setUnitPrice(600.00);
-		consumption.setStatus(1);
-		consumption.setModifiedDate("2021-6-5");
-		consumption.setModifiedBy(1);
-		consumption.setMacc("AC4000");
-		consumption.setDate("2021-6-5");
-		consumption.setCurruntReading(234);
-		consumption.setCreateDate("2021-5-5");
-		consumption.setCreateBy(1);
-		String out = AddConsmptionRecord(consumption);
+//		Consumption consumption = new Consumption();
+//		consumption.setUnits(800.99);
+//		consumption.setUnitPrice(600.00);
+//		consumption.setStatus(1);
+//		consumption.setModifiedDate("2021-6-5");
+//		consumption.setModifiedBy(1);
+//		consumption.setMacc("AC4000");
+//		consumption.setDate("2021-6-5");
+//		consumption.setCurruntReading(234);
+//		consumption.setCreateDate("2021-5-5");
+//		consumption.setCreateBy(1);
+//		String out = AddConsmptionRecord(consumption);
 //		System.out.println(getLastReading("AC3000"));
+		System.out.println(calulateUnits("AC4000",968));
 	}
 }
