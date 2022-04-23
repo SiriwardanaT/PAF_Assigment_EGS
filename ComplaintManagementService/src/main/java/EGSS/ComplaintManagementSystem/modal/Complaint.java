@@ -6,7 +6,7 @@ public class Complaint {
 	private String subject;
 	private String content;
 	private int uid;
-	private String status;
+	private int status;
 	private int createBy;
 	private String createDate;
 	private int modifiedBy;
@@ -16,7 +16,7 @@ public class Complaint {
 		super();
 	}
 		
-	public Complaint(String id, String subject, String content, int uid, String status, int createBy, String createDate, int modifiedBy, String modifiedDate)
+	public Complaint(String id, String subject, String content, int uid, int status, int createBy, String createDate, int modifiedBy, String modifiedDate)
 	{
 		super();
 		this.id = id;
@@ -63,11 +63,11 @@ public class Complaint {
 		this.uid = uid;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

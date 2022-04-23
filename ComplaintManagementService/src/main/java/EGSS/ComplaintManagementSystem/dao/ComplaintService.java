@@ -32,7 +32,7 @@ public class ComplaintService {
 			preparedStatement.setString(2,complaint.getSubject());
 			preparedStatement.setString(3,complaint.getContent());
 			preparedStatement.setInt(4,complaint.getUid());
-			preparedStatement.setString(5,complaint.getStatus());
+			preparedStatement.setInt(5,complaint.getStatus());
 			preparedStatement.setInt(6,complaint.getCreateBy());
 			preparedStatement.setString(7,complaint.getCreateDate());
 			preparedStatement.setInt(8,complaint.getModifiedBy());
