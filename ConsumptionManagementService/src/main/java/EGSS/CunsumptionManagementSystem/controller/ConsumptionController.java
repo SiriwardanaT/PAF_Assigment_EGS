@@ -2,6 +2,7 @@ package EGSS.CunsumptionManagementSystem.controller;
 
 import java.sql.SQLException;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -37,11 +38,17 @@ public class ConsumptionController {
     	
     }
     
-    @Path("{Acc}")
+    @Path("account/{Acc}")
     @GET
     public String SearchConsumption(@PathParam("Acc") String acc) throws ClassNotFoundException, SQLException {
     	
     	return ConsumptionService.SearchConsumptionByAcc(acc);
+    }
+    
+    @Path("account/{Acc}/date/{Date}")
+    @DELETE
+    public String DeleteRecord(@PathParam("Acc") String acc, @PathParam("Date") String date) throws ClassNotFoundException, SQLException {
+    	   return ConsumptionService.deleteConsumptionRecord(acc, date);
     }
     
     
