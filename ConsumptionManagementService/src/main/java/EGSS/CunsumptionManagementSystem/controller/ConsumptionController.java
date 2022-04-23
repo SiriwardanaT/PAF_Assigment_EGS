@@ -54,9 +54,8 @@ public class ConsumptionController {
     
     @Path("account/{id}")
     @PUT
-    public int updateRecord(Consumption consumption, @PathParam("id") int id) {
-    	  System.out.println(consumption.getMacc());
-    	  return id;
+    public String updateRecord(Consumption consumption, @PathParam("id") int id) throws ClassNotFoundException, SQLException {
+    	  return ConsumptionService.updateConsumption(consumption, id);
     }
     
     
