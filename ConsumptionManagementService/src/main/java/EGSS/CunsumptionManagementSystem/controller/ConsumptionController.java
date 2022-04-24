@@ -15,7 +15,7 @@ import EGSS.CunsumptionManagementSystem.dao.ConsumptionService;
 import EGSS.CunsumptionManagementSystem.modal.Consumption;
 
 
-@Path("admin")
+@Path("consumption")
 public class ConsumptionController {
 	
 	//GET:http://localhost:8081/ConsumptionManagementService/api/admin
