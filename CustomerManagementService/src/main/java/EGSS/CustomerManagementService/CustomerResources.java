@@ -1,5 +1,7 @@
 package EGSS.CustomerManagementService;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 
@@ -18,13 +20,19 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import EGSS.CustomerManagementService.contoller.CustomerController;
+import EGSS.CustomerManagementService.contoller.LoginController;
 import EGSS.CustomerManagementService.modal.CustomerModal;
 
 
 
 @Path("customer")
 public class CustomerResources {
-
+	@Path("/login")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+	public Response Login(CustomerModal customer) throws ClassNotFoundException, SQLException, InvalidKeyException, NoSuchAlgorithmException {
+		return Response.status(Status.CREATED).entity(LoginController.loginUser(customer.getEmail(), customer.getPassword())).build();
+	}
 	
     // Post method to add customer to DB
 	

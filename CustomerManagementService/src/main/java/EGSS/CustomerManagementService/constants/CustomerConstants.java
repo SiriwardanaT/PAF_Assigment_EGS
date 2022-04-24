@@ -9,7 +9,7 @@ public class CustomerConstants {
     public static String DELETECUSTOMER = "delete from customer where id=?";
     public static String GETAUTHDETAILS ="select id  from customer order by id desc limit 1 ";
     public static String INSERTAUTHDATA ="insert into user(uid,password,id)values(?,?,?)";
-    public static String LOGUSER = "select c.id c.role from user u , customer c where c.email=? and u.password=?";
+    public static String LOGUSER = "select c.id ,c.email,u.password,c.role from user u , customer c where c.email=? and u.password=?";
     
     public static int INDEX_ONE  =  1;
 	public static int INDEX_TWO  =  2;
