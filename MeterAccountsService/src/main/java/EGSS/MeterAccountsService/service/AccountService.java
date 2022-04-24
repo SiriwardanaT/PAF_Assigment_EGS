@@ -39,14 +39,14 @@ public class AccountService {
 	        		+ "    <th>Account No</th>\r\n"
 	        		+ "    <th>Installation Address</th>\r\n"
 	        		+ "    <th>Installation Date</th>\r\n"
-	        		+ "    <th>UserID</th>\r\n"
+	        		+ "    <th>UserName</th>\r\n"
 	        		+ "  </tr>";
 		while(rs.next()) {
 			output += "<tr>";
 			output += "<th style='color:green'>"+rs.getString(1) +"</th>";
 			output += "<th>"+rs.getString(2) +"</th>";
 			output += "<th>"+rs.getString(3) +"</th>";
-			output += "<th >"+rs.getString(4) +"</th>";
+			output += "<th >"+InterCommunication.getCustomer(Integer.parseInt(rs.getString(4))).getLastName()+"</th>";
 			output += "</tr>";
 		}
 		output += "</table>";
