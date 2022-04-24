@@ -8,12 +8,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MultivaluedMap;
+
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+
 import EGSS.CustomerManagementService.modal.CustomerModal;
-import EGSS.CustomerManagementService.modal.UserModal;
 import EGSS.CustomerManagementService.utils.CustomerDBConnection;
 import EGSS.CustomerManagementService.constants.CustomerConstants;
 
 public class CustomerController {
+	
+	  private final static String baseURL = "https://api.mailgun.net/v2/";
+	  private static String mailgunAPIKey;
 	
 	//add customer
 	
@@ -31,16 +41,17 @@ public class CustomerController {
 				  preparedStatement.setInt(CustomerConstants.INDEX_ONE, customer.getId());
 				  preparedStatement.setString(CustomerConstants.INDEX_TWO, customer.getFirstName());
 				  preparedStatement.setString(CustomerConstants.INDEX_TREE, customer.getLastName());
-				  preparedStatement.setString(CustomerConstants.INDEX_TREE,customer.getNIC());
-				  preparedStatement.setString(CustomerConstants.INDEX_FOUR,customer.getEmail());
-				  preparedStatement.setString(CustomerConstants.INDEX_FIVE,customer.getStreet());
-				  preparedStatement.setString(CustomerConstants.INDEX_SIX,customer.getState());
-				  preparedStatement.setString(CustomerConstants.INDEX_SEVEN,customer.getPostalCode());
-				  preparedStatement.setBoolean(CustomerConstants.INDEX_EIGHT,customer.isStatus());
-				  preparedStatement.setInt(CustomerConstants.INDEX_NINE,customer.getCreatedBy());
-				  preparedStatement.setDate(CustomerConstants.INDEX_TEN,customer.getCreatedDate());
-				  preparedStatement.setInt(CustomerConstants.INDEX_ELEVEN,customer.getModifiedBy());
-				  preparedStatement.setDate(CustomerConstants.INDEX_TWELEVE,customer.getModifiedDate());
+				  preparedStatement.setString(CustomerConstants.INDEX_FOUR,customer.getNic());
+				  preparedStatement.setString(CustomerConstants.INDEX_FIVE,customer.getEmail());
+				  preparedStatement.setString(CustomerConstants.INDEX_SIX,customer.getStreet());
+				  preparedStatement.setString(CustomerConstants.INDEX_SEVEN,customer.getState());
+				  preparedStatement.setString(CustomerConstants.INDEX_EIGHT,customer.getPostalCode());
+				  preparedStatement.setBoolean(CustomerConstants.INDEX_NINE,customer.isStatus());
+				  preparedStatement.setInt(CustomerConstants.INDEX_TEN,customer.getCreateBy());
+				  preparedStatement.setDate(CustomerConstants.INDEX_ELEVEN,customer.getCreateDate());
+				  preparedStatement.setInt(CustomerConstants.INDEX_TWELEVE,customer.getModifiedBy());
+				  preparedStatement.setDate(CustomerConstants.INDEX_THIRTEEN,customer.getModifiedDate());
+				  preparedStatement.setString(CustomerConstants.INDEX_FOURTEEN,customer.getRole());
 			  }
 			 
 			 
@@ -49,7 +60,10 @@ public class CustomerController {
 			
 			  boolean successfullyAdded = preparedStatement.execute();
 			  if(!successfullyAdded) {
+				
 				  return customer;
+				 
+				  
 			  }
 			  else {
 				  return null;
@@ -70,11 +84,11 @@ public class CustomerController {
 		  ResultSet rs = preparedStatement.executeQuery();
 		  while(rs.next()) {
 			  int id = rs.getInt("id");
-			  String email = rs.getString("email");
-			  String role = rs.getString("role");
+			 
 			  
-			  customers = new CustomerModal();
+//			  CustomerModal customers = new CustomerModal();
 		  }
+		  insertAuthData(customers);
 		  
 		return customers;
 		 
@@ -86,30 +100,45 @@ public class CustomerController {
 		  Connection connection = CustomerDBConnection.getConnection();
 		  PreparedStatement preparedStatement = connection.prepareStatement(query);
 		  String password = generateRandomPassword(8);
-		  boolean result = isExistingCustomerId(customer.getId());
-		  if(result == true) {
+//		  boolean result = isExistingCustomerId(customer.getId());
+//		  if(result == true) {
+//			  
 			  
-			  
-		  }else {
-			  preparedStatement.setInt(CustomerConstants.INDEX_ONE, customer.getId());
-			  preparedStatement.setString(CustomerConstants.INDEX_TWO, customer.getRole());
-			  preparedStatement.setString(CustomerConstants.INDEX_TREE, password);
+//		  }else {
+			  preparedStatement.setInt(CustomerConstants.INDEX_ONE, customer.getUid());
+			  preparedStatement.setString(CustomerConstants.INDEX_TWO, password);
+			  preparedStatement.setInt(CustomerConstants.INDEX_TREE, customer.getId());
 			  boolean successfullyAdded = preparedStatement.execute();
 			  if(!successfullyAdded) {
+				
+
+				
+//				  createPrivateClient();
+				
 				  return customer;
 			  }
 			  else {
 				  return null;
 			  }
-		  }
-		  
-		return null;
+//		  }
 		
 	 }
+	 
+//	 public static <T> WebTarget createPrivateClient() {
+//	      final Client client = ClientBuilder.newClient();
+//	      client.register(HttpAuthenticationFeature.basic("api",mailgunAPIKey));
+//	      return client.target(baseURL);
+//	  }
+//
+//	  protected void fireMailGun(final MultivaluedMap<String, String> postData) {
+//	      this.createPrivateClient().path("YOUR_DOMAIN/messages")
+//	                                .request()
+//	                                .post(Entity.form(postData));
+//	  }
 		
 	// view customer
 		
-		public static List<CustomerModal> viewListOfCustomers() throws SQLException{
+		public static String viewListOfCustomers() throws SQLException{
 			List <CustomerModal> customers = new ArrayList<> ();
 			
 			 String query =CustomerConstants.VIEWCUSTOMER;
@@ -119,36 +148,46 @@ public class CustomerController {
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			  PreparedStatement preparedStatement = connection.prepareStatement(query);
+			  System.out.println(connection.prepareStatement(query));
 			  ResultSet rs = preparedStatement.executeQuery();
+			  String output = "<h1>Customer Details</h1>";
+			  output += "<table border='1'>";
+		        output += "<tr>\r\n"
+		        		+ "    <th>First Name</th>\r\n"
+		        		+ "    <th>Last Name</th>\r\n"
+		        		+ "    <th>NIC</th>\r\n"
+		        		+ "    <th>Street</th>\r\n"
+		        		+ "    <th>State</th>\r\n"
+		        		+ "    <th>Postal Code</th>\r\n"
+		        		+ "    <th>Status</th>\r\n"
+		        		+ "  </tr>";
 			  
 			  while(rs.next()) {
-			
-				  String firstName = rs.getString("firstName");
-				  String lastName = rs.getString("lastName");
-				  String NIC = rs.getString("NIC");
-				  String email = rs.getString("email");
-				  String Street = rs.getString("Street");
-				  String state = rs.getString("state");
-				  String postalCode = rs.getString("postalCode");
-				  Boolean status = rs.getBoolean("status");
+				  output += "<tr>";
+				  output += "<td>"+ rs.getString(1)+"</td>";
+				  output += "<td>"+ rs.getString(2)+"</td>";
+				  output += "<td>"+ rs.getString(3)+"</td>";
+				  output += "<td>"+ rs.getString(4)+"</td>";
+				  output += "<td>"+ rs.getString(5)+"</td>";
+				  output += "<td>"+ rs.getString(6)+"</td>";
+				  output += "<td>"+ rs.getString(7)+"</td>";
+				  output += "<td>"+ rs.getBoolean(8)+"</td>";
+				  output += "</tr>";
 				 
-				  customers.add(new CustomerModal(firstName,lastName,NIC,email,Street,state,postalCode,status));
-					
+//				  customers.add(new CustomerModal(firstName,lastName,nic,email,street,state,postalCode,status));
+//				  System.out.println( customers.add(new CustomerModal(firstName,lastName,nic,email,street,state,postalCode,status)))
 			  }
 			  
-			
-			return null;
+			  output += "</table>";
+			return output;
 			
 			
 		}
 		
 		// get one customer
-		   public CustomerModal selectCustomer( int id) {
+		   public String selectCustomer( int id) throws SQLException {
 			   CustomerModal customer = null;
 		    	  
 		    	  
@@ -160,33 +199,40 @@ public class CustomerController {
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace()
-				}
+				} 
 				  PreparedStatement preparedStatement = connection.prepareStatement(query);
 		    		      ResultSet rs = preparedStatement.executeQuery();
-		    		    
+		    		      String output = "<h1>Customer Details</h1>";
+		    			  output += "<table border='1'>";
+		    		        output += "<tr>\r\n"
+		    		        		+ "    <th>First Name</th>\r\n"
+		    		        		+ "    <th>Last Name</th>\r\n"
+		    		        		+ "    <th>NIC</th>\r\n"
+		    		        		+ "    <th>Street</th>\r\n"
+		    		        		+ "    <th>State</th>\r\n"
+		    		        		+ "    <th>Postal Code</th>\r\n"
+		    		        		+ "    <th>Status</th>\r\n"
+		    		        		+ "  </tr>";
 		    		    while(rs.next()) {
 		    		    	
-		    		    	String firstName = rs.getString("firstname");
-		    		    	String lastName = rs.getString("lastname");
-		    		    	String NIC = rs.getString("position");
-		    		    	String email = rs.getString("salary");
-		    		    	String Street = rs.getString("Street");
-		    		    	String state = rs.getString("state");
-		    		    	String postalCode = rs.getString("postalCode");
-		    		    	Boolean status = rs.getBoolean("status");
+		    		    	output += "<tr>";
+		  				  output += "<td>"+ rs.getString(1)+"</td>";
+		  				  output += "<td>"+ rs.getString(2)+"</td>";
+		  				  output += "<td>"+ rs.getString(3)+"</td>";
+		  				  output += "<td>"+ rs.getString(4)+"</td>";
+		  				  output += "<td>"+ rs.getString(5)+"</td>";
+		  				  output += "<td>"+ rs.getString(6)+"</td>";
+		  				  output += "<td>"+ rs.getString(7)+"</td>";
+		  				  output += "<td>"+ rs.getBoolean(8)+"</td>";
+		  				  output += "</tr>";
 		    		    	
 		    		    	
 		    		    	
-		    		    	
-		    		    	
-		    		    	customer = new CustomerModal(id,firstName, lastName,NIC,email,Street,state,postalCode,status);
+//		    		    	customer = new CustomerModal(id,firstName, lastName,NIC,email,Street,state,postalCode,status);
 		    		    }
 		    	  
-		    			  
-				return customer;
+		    		    output += "</table>";	  
+				return output;
 		    	 
 		    	     
 		     }
@@ -211,17 +257,17 @@ public class CustomerController {
 		        	
 				  preparedStatement.setString(1, customer.getFirstName());
 				  preparedStatement.setString(2,customer.getLastName());
-				  preparedStatement.setString(3, customer.getNIC());
+				  preparedStatement.setString(3, customer.getNic());
 				  preparedStatement.setString(4,customer.getEmail());
 				  preparedStatement.setString(5,customer.getStreet());
 				  preparedStatement.setString(6,customer.getState());
 				  preparedStatement.setString(7,customer.getPostalCode());
 				  preparedStatement.setBoolean(8,customer.isStatus());
 		            
-				  preparedStatement.setInt(5, customer.getId());
+				  preparedStatement.setInt(9, customer.getId());
 
 		             rowUpdated = preparedStatement.executeUpdate() > 0;//return number of rows updated
-		        
+		             System.out.println(rowUpdated);
 		         return rowUpdated;
 		     }
 		   
@@ -245,7 +291,7 @@ public class CustomerController {
 				  preparedStatement.setInt(1,id);
 					//use to update the query
 		             rowDeleted = preparedStatement.executeUpdate() > 0;//return number of rows deleted
-		        
+		              System.out.println(rowDeleted);
 		         return rowDeleted;
 		     }
 		   

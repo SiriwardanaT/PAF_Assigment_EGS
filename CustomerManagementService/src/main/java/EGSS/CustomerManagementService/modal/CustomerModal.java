@@ -7,63 +7,69 @@ public class CustomerModal {
 	public int id;
 	private String firstName;
 	private String lastName;
-	private String NIC;
+	private String nic;
 	public String email;
 	private String Street;
 	private String state;
 	private String postalCode;
 	private boolean status;
-	private int createdBy;
-	private Date createdDate;
+	private int createBy;
+	private Date createDate;
 	private int modifiedBy;
 	private Date modifiedDate;
-	private int userId;
+	private int uid;
+	public int getUid() {
+		return uid;
+	}
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
 	private String role;
 	private String password;
 	public CustomerModal() {
 		super();
 	}
-	public CustomerModal(int id, String firstName, String lastName, String nIC, String email, String street,
-			String state, String postalCode, boolean status, int createdBy, Date createdDate, int modifiedBy,
+	public CustomerModal(int id, String firstName, String lastName, String nic, String email, String Street,
+			String state, String postalCode, boolean status, int createBy, Date createDate, int modifiedBy,
 			Date modifiedDate) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		NIC = NIC;
+		this.nic = nic;
 		this.email = email;
-		Street = street;
+		this.Street = Street;
 		this.state = state;
 		this.postalCode = postalCode;
 		this.status = status;
-		this.createdBy = createdBy;
-		this.createdDate = createdDate;
+		this.createBy = createBy;
+		this.createDate = createDate;
 		this.modifiedBy = modifiedBy;
 		this.modifiedDate = modifiedDate;
 	}
-	public CustomerModal(String firstName, String lastName, String NIC, String email, String street, String state,
+	public CustomerModal(String firstName, String lastName, String nic, String email, String Street, String state,
 			String postalCode, boolean status) {
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
-		NIC = NIC;
+		this.nic = nic;
 		this.email = email;
-		Street = street;
+		this.Street = Street;
 		this.state = state;
 		this.postalCode = postalCode;
 		this.status = status;
 		// TODO Auto-generated constructor stub
 	}
 	
-	public CustomerModal(int id , String firstName, String lastName, String NIC, String email, String street, String state,
+	public CustomerModal(int id , String firstName, String lastName, String nic, String email, String Street, String state,
 			String postalCode, boolean status) {
 		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		NIC = NIC;
+		this.nic = nic;
 		this.email = email;
-		Street = street;
+		this.Street = Street;
 		this.state = state;
 		this.postalCode = postalCode;
 		this.status = status;
@@ -86,11 +92,11 @@ public class CustomerModal {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getNIC() {
-		return NIC;
+	public String getNic() {
+		return nic;
 	}
-	public void setNIC(String nIC) {
-		NIC = nIC;
+	public void setNic(String nic) {
+		this.nic = nic;
 	}
 	public String getEmail() {
 		return email;
@@ -101,8 +107,8 @@ public class CustomerModal {
 	public String getStreet() {
 		return Street;
 	}
-	public void setStreet(String street) {
-		Street = street;
+	public void setStreet(String Street) {
+		this.Street = Street;
 	}
 	public String getState() {
 		return state;
@@ -122,17 +128,17 @@ public class CustomerModal {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	public int getCreatedBy() {
-		return createdBy;
+	public int getCreateBy() {
+		return createBy;
 	}
-	public void setCreatedBy(int createdBy) {
-		this.createdBy = createdBy;
+	public void setCreateBy(int createBy) {
+		this.createBy = createBy;
 	}
-	public Date getCreatedDate() {
-		return createdDate;
+	public Date getCreateDate() {
+		return createDate;
 	}
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+	public void setCreatedDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	public int getModifiedBy() {
 		return modifiedBy;
@@ -146,9 +152,16 @@ public class CustomerModal {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+	public void setRole(String role) {
+		this.role = role;
+	}
 	public String getRole() {
+		
+		return role;
+	}
+	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 	
 	

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -26,8 +27,10 @@ public class CustomerResources {
 
 	
     // Post method to add customer to DB
+	
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON})
+//    @Consumes({MediaType.APPLICATION_JSON})
     public Response addCus(CustomerModal customer) throws ClassNotFoundException, SQLException {
    	 System.out.println(customer);
    	 CustomerModal addCustomerToDB = CustomerController.addCustomer(customer);
@@ -43,7 +46,8 @@ public class CustomerResources {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getAllCustomers() throws ClassNotFoundException, SQLException{
-    	
+    
+//    	
     	if(CustomerController.viewListOfCustomers().isEmpty()) {
     		return Response.status(Status.NOT_FOUND).entity("No Products founds").build();
     	}
@@ -52,6 +56,41 @@ public class CustomerResources {
     	}
     	
 	}
+    
+    
+//    //get auth
+    @Path("Auth/getAuth")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getAuthDetails() throws ClassNotFoundException, SQLException{
+    
+//    	
+    	if(CustomerController.getAuthData().isEmpty()) {
+//    		System.out.println()
+    		return Response.status(Status.NOT_FOUND).entity("No Products founds").build();
+    	}
+    	else {
+    		return Response.status(Status.ACCEPTED).entity(CustomerController.getAuthData()).build();
+    	}
+    	
+	}
+    
+    //insert auth
+    @Path("Auth/insertAuth")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+//    @Consumes({MediaType.APPLICATION_JSON})
+    public Response insertAuth(CustomerModal customer) throws ClassNotFoundException, SQLException {
+   	 System.out.println(customer);
+   	 CustomerModal insertCustomerauth = CustomerController.insertAuthData(customer);
+   	 if(insertCustomerauth != null) {
+   		 return Response.status(Status.CREATED).entity(insertCustomerauth).build();
+   	 }
+   	 else {
+   		 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(null).build();
+   	 }
+   	 
+   }
     
     
     @DELETE
@@ -71,6 +110,19 @@ public class CustomerResources {
     
     	
 	}
+    
+//    @GET
+//    @Path("{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//	public Response getOneCustomer(@PathParam("id")int id) throws ClassNotFoundException, SQLException{
+//        
+////    	
+//    	
+//    	 
+//    		return Response.status(Status.ACCEPTED).entity((id)).build();
+//    	
+//    	
+//	}
     
     
     @PUT
