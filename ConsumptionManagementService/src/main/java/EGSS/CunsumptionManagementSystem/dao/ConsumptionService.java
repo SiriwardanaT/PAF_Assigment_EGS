@@ -32,6 +32,7 @@ public class ConsumptionService {
         		+ "    <th>Last Reading</th>\r\n"
         		+ "    <th>Currunt Reading</th>\r\n"
         		+ "    <th>Account No</th>\r\n"
+        		+ "    <th>Admin Approvement</th>\r\n"
         		+ "  </tr>";
 		while(rs.next()) {
 			output += "<tr>";
@@ -42,7 +43,12 @@ public class ConsumptionService {
 			output += "<th>"+rs.getString(5) +"</th>";
 			output += "<th>"+rs.getString(6) +"</th>";
 			output += "<th>"+rs.getString(7) +"</th>";
-			output += "<th>"+rs.getString(8) +"</th>";
+			if(rs.getString(8).equals("0")) {
+				output += "<th style='color:red'>Not Aprroved</th>";
+			}
+			else {
+				output += "<th style='color:green'>Aprroved</th>";
+			}
 			output += "</tr>";
 		}
 		output += "</table>";
@@ -106,6 +112,7 @@ public class ConsumptionService {
 	        		+ "    <th>Last Reading</th>\r\n"
 	        		+ "    <th>Currunt Reading</th>\r\n"
 	        		+ "    <th>Account No</th>\r\n"
+	        		+ "    <th>Admin Approvement</th>\r\n"
 	        		+ "  </tr>";
 		while(rs.next()) {
 			output += "<tr>";
@@ -145,16 +152,29 @@ public class ConsumptionService {
 		}
 	}
 	
-//	public static String updateConsumption(Consumption consumption, int id) throws ClassNotFoundException, SQLException {
-//		Connection con = DbConnection.getDbConnection();
-//		if(con == null) {
-//			return Constant.ConnectionERR;
-//		}
-//		else {
-//			PreparedStatement preparedStatement =  con.prepareStatement("update consumption set  ");
-//			
-//		}
-//	}
+	public static String updateConsumption(Consumption consumption, int id) throws ClassNotFoundException, SQLException {
+		Connection con = DbConnection.getDbConnection();
+		String output = "";
+		if(con == null) {
+			return Constant.ConnectionERR;
+		}
+		else {
+			PreparedStatement preparedStatement =  con.prepareStatement("update consumption set status = ? , unitPrice = ?  where id = ? ");
+			preparedStatement.setInt(1, consumption.getStatus());
+			preparedStatement.setDouble(2, consumption.getUnitPrice());
+			preparedStatement.setInt(3,id);
+			
+			int res = preparedStatement.executeUpdate();
+			
+			if(res == 1) {
+				return output = "updated Successfully";
+			}
+			else {
+				return output = "Error:occoured";
+			}
+			
+		}
+	}
 	
 	
 	// helper methods
@@ -185,10 +205,10 @@ public class ConsumptionService {
 	
 	
 	public static void main(String [] args) throws ClassNotFoundException, SQLException {
-//		Consumption consumption = new Consumption();
+		Consumption consumption = new Consumption();
 //		consumption.setUnits(800.99);
-//		consumption.setUnitPrice(600.00);
-//		consumption.setStatus(1);
+		consumption.setUnitPrice(600.00);
+		consumption.setStatus(1);
 //		consumption.setModifiedDate("2021-6-5");
 //		consumption.setModifiedBy(1);
 //		consumption.setMacc("AC4000");
@@ -196,8 +216,8 @@ public class ConsumptionService {
 //		consumption.setCurruntReading(234);
 //		consumption.setCreateDate("2021-5-5");
 //		consumption.setCreateBy(1);
-//		String out = AddConsmptionRecord(consumption);
-//		System.out.println(getLastReading("AC3000"));
-		System.out.println(calulateUnits("AC4000",968));
+		String out = AddConsmptionRecord(consumption);
+		System.out.println(getLastReading("AC3000"));
+		System.out.println(updateConsumption(consumption,17));
 	}
 }
