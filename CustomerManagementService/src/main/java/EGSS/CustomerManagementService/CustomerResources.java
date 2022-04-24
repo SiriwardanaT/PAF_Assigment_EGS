@@ -111,18 +111,21 @@ public class CustomerResources {
     	
 	}
     
-//    @GET
-//    @Path("{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//	public Response getOneCustomer(@PathParam("id")int id) throws ClassNotFoundException, SQLException{
-//        
-////    	
-//    	
-//    	 
-//    		return Response.status(Status.ACCEPTED).entity((id)).build();
-//    	
-//    	
-//	}
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getOneCustomer(@PathParam("id")int id) throws ClassNotFoundException, SQLException{
+        
+    	
+    	  
+    	 
+    	if(CustomerController.selectCustomer(id) != null) {
+    		return Response.status(Status.ACCEPTED).entity(CustomerController.selectCustomer(id)).build();
+    	}
+    	
+    	return Response.status(Status.OK).entity(id).build();
+    	
+	}
     
     
     @PUT
