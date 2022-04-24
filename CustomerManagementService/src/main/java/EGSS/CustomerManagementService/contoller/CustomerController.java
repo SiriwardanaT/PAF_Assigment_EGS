@@ -187,7 +187,7 @@ public class CustomerController {
 		}
 		
 		// get one customer
-		   public String selectCustomer( int id) throws SQLException {
+		   public static String selectCustomer( int id) throws SQLException {
 			   CustomerModal customer = null;
 		    	  
 		    	  
@@ -201,6 +201,7 @@ public class CustomerController {
 					e.printStackTrace();
 				} 
 				  PreparedStatement preparedStatement = connection.prepareStatement(query);
+				  preparedStatement.setInt(1,id);
 		    		      ResultSet rs = preparedStatement.executeQuery();
 		    		      String output = "<h1>Customer Details</h1>";
 		    			  output += "<table border='1'>";
@@ -224,6 +225,7 @@ public class CustomerController {
 		  				  output += "<td>"+ rs.getString(6)+"</td>";
 		  				  output += "<td>"+ rs.getString(7)+"</td>";
 		  				  output += "<td>"+ rs.getBoolean(8)+"</td>";
+		  				  int uid = rs.getInt("id");
 		  				  output += "</tr>";
 		    		    	
 		    		    	
