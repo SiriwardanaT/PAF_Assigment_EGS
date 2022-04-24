@@ -14,7 +14,7 @@ import EGSS.CustomerManagementService.utils.CustomerDBConnection;
 
 public class LoginController {
 	
-	public static UserModal loginUser(String email,String password) throws ClassNotFoundException, SQLException {
+	public static CustomerModal loginUser(String email,String password) throws ClassNotFoundException, SQLException {
 		 String query =CustomerConstants.LOGUSER;
 		  Connection connection = CustomerDBConnection.getConnection();
 		  PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -25,7 +25,7 @@ public class LoginController {
 		  password = rs.getString("password");
 		  
 		  if(email.equals(email) && password.equals(password)) {
-			  //token creation
+			   
 			  
 		  }
 		  
