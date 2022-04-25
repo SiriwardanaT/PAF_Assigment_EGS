@@ -14,9 +14,9 @@ public class CustomerModal {
 	private String postalCode;
 	private boolean status;
 	private int createBy;
-	private Date createDate;
+	private String createDate;
 	private int modifiedBy;
-	private Date modifiedDate;
+	private String modifiedDate;
 	private int uid;
 	public int getUid() {
 		return uid;
@@ -36,8 +36,8 @@ public class CustomerModal {
 		super();
 	}
 	public CustomerModal(int id, String firstName, String lastName, String nic, String email, String Street,
-			String state, String postalCode, boolean status, int createBy, Date createDate, int modifiedBy,
-			Date modifiedDate) {
+			String state, String postalCode, boolean status, int createBy, String createDate, int modifiedBy,
+			String modifiedDate) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -52,6 +52,12 @@ public class CustomerModal {
 		this.createDate = createDate;
 		this.modifiedBy = modifiedBy;
 		this.modifiedDate = modifiedDate;
+	}
+	
+	
+	public CustomerModal(int id) {
+		super();
+		this.id = id;
 	}
 	public CustomerModal(String firstName, String lastName, String nic, String email, String Street, String state,
 			String postalCode, boolean status) {
@@ -68,7 +74,7 @@ public class CustomerModal {
 	}
 	
 	public CustomerModal(int id , String firstName, String lastName, String nic, String email, String Street, String state,
-			String postalCode, boolean status) {
+			String postalCode) {
 		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.firstName = firstName;
@@ -147,10 +153,10 @@ public class CustomerModal {
 	public void setCreateBy(int createBy) {
 		this.createBy = createBy;
 	}
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
-	public void setCreatedDate(Date createDate) {
+	public void setCreatedDate(String createDate) {
 		this.createDate = createDate;
 	}
 	public int getModifiedBy() {
@@ -159,10 +165,10 @@ public class CustomerModal {
 	public void setModifiedBy(int modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
-	public Date getModifiedDate() {
+	public String getModifiedDate() {
 		return modifiedDate;
 	}
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(String modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 	public void setRole(String role) {
