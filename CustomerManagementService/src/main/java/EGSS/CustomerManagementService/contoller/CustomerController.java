@@ -22,22 +22,16 @@ import EGSS.CustomerManagementService.constants.CustomerConstants;
 
 public class CustomerController {
 	
-	  private final static String baseURL = "https://api.mailgun.net/v2/";
-	  private static String mailgunAPIKey;
+	  
 	
-	//add customer
+	     //add customer details to system
 	
-		public static CustomerModal addCustomer(CustomerModal customer) throws SQLException, ClassNotFoundException {
+		public static String addCustomer(CustomerModal customer) throws SQLException, ClassNotFoundException {
+			  String result = "";
 			  String query =CustomerConstants.ADDTOCUSTOMER;
 			  Connection connection = CustomerDBConnection.getConnection();
 			  PreparedStatement preparedStatement = connection.prepareStatement(query);
 			  
-			 
-			  
-			  boolean result = isExistingEmail(customer.getEmail());
-			  if(result == true) {
-				  
-			  }else {
 				  preparedStatement.setInt(CustomerConstants.INDEX_ONE, customer.getId());
 				  preparedStatement.setString(CustomerConstants.INDEX_TWO, customer.getFirstName());
 				  preparedStatement.setString(CustomerConstants.INDEX_TREE, customer.getLastName());
@@ -48,208 +42,163 @@ public class CustomerController {
 				  preparedStatement.setString(CustomerConstants.INDEX_EIGHT,customer.getPostalCode());
 				  preparedStatement.setBoolean(CustomerConstants.INDEX_NINE,customer.isStatus());
 				  preparedStatement.setInt(CustomerConstants.INDEX_TEN,customer.getCreateBy());
-				  preparedStatement.setDate(CustomerConstants.INDEX_ELEVEN,customer.getCreateDate());
+				  preparedStatement.setString(CustomerConstants.INDEX_ELEVEN,customer.getCreateDate());
 				  preparedStatement.setInt(CustomerConstants.INDEX_TWELEVE,customer.getModifiedBy());
-				  preparedStatement.setDate(CustomerConstants.INDEX_THIRTEEN,customer.getModifiedDate());
+				  preparedStatement.setString(CustomerConstants.INDEX_THIRTEEN,customer.getModifiedDate());
 				  preparedStatement.setString(CustomerConstants.INDEX_FOURTEEN,customer.getRole());
-			  }
-			 
-			 
-				
-				
 			
-			  boolean successfullyAdded = preparedStatement.execute();
-			  if(!successfullyAdded) {
+			 
 				
-				  return customer;
-				 
-				  
-			  }
-			  else {
-				  return null;
+				   boolean successfullyAdded = preparedStatement.execute();
+			       if(!successfullyAdded) {
+				
+				        return result = "Successfully added to the system";
+				   }
+			       else {
+				       return result = " Error occur while inserting data";
 			  }
 		}
 		
 		
 		
-	//add auth
-	 public static CustomerModal getAuthData() throws ClassNotFoundException, SQLException {
-		 
-		 CustomerModal customers = new CustomerModal();
-		 
-		 String query =CustomerConstants.GETAUTHDETAILS;
-		  Connection connection = CustomerDBConnection.getConnection();
-		  PreparedStatement preparedStatement = connection.prepareStatement(query);
+	     // Get id for authentication
 		
-		  ResultSet rs = preparedStatement.executeQuery();
-		  while(rs.next()) {
-			  int id = rs.getInt("id");
-			 
-			  
-//			  CustomerModal customers = new CustomerModal();
-		  }
-		  insertAuthData(customers);
-		  
-		return customers;
+	      public static CustomerModal getAuthData() throws ClassNotFoundException, SQLException {
 		 
-	 }
-	 
-	 public static CustomerModal insertAuthData(CustomerModal customer) throws ClassNotFoundException, SQLException {
-		 
-		 String query =CustomerConstants.INSERTAUTHDATA;
-		  Connection connection = CustomerDBConnection.getConnection();
-		  PreparedStatement preparedStatement = connection.prepareStatement(query);
-		  String password = generateRandomPassword(8);
-//		  boolean result = isExistingCustomerId(customer.getId());
-//		  if(result == true) {
-//			  
-			  
-//		  }else {
-			  preparedStatement.setInt(CustomerConstants.INDEX_ONE, customer.getUid());
-			  preparedStatement.setString(CustomerConstants.INDEX_TWO, password);
-			  preparedStatement.setInt(CustomerConstants.INDEX_TREE, customer.getId());
-			  boolean successfullyAdded = preparedStatement.execute();
-			  if(!successfullyAdded) {
-				
+		        CustomerModal customers = new CustomerModal();
+		        String query =CustomerConstants.GETAUTHDETAILS;
+		        Connection connection = CustomerDBConnection.getConnection();
+		        PreparedStatement preparedStatement = connection.prepareStatement(query);
+		
+		        ResultSet rs = preparedStatement.executeQuery();
+		        while(rs.next()) {
+			        int id = rs.getInt("id");
+			       customers = new CustomerModal(id);
+		         } 
 
+		       return customers;
+		 
+	        }
+	      
+	      
+	      // Generate Password 
+	      
+	       public static String insertAuthData(CustomerModal customer) throws ClassNotFoundException, SQLException {
+		         
+	    	     String result = "";
+		         String query =CustomerConstants.INSERTAUTHDATA;
+		         Connection connection = CustomerDBConnection.getConnection();
+		         PreparedStatement preparedStatement = connection.prepareStatement(query);
+		         
+		         //generate random password
+		         String password = generateRandomPassword(8);
+	
+			     preparedStatement.setInt(CustomerConstants.INDEX_ONE, customer.getUid());
+			     preparedStatement.setString(CustomerConstants.INDEX_TWO, password);
+			     preparedStatement.setInt(CustomerConstants.INDEX_TREE, customer.getId());
+			     boolean successfullyAdded = preparedStatement.execute();
+			      if(!successfullyAdded) {
 				
-//				  createPrivateClient();
-				
-				  return customer;
-			  }
-			  else {
-				  return null;
-			  }
-//		  }
-		
-	 }
+				     return result = "Password generate Successfully";
+			       }
+			     else {
+				    return result =" Error occur while generating password";
+			     }
+          }
 	 
-//	 public static <T> WebTarget createPrivateClient() {
-//	      final Client client = ClientBuilder.newClient();
-//	      client.register(HttpAuthenticationFeature.basic("api",mailgunAPIKey));
-//	      return client.target(baseURL);
-//	  }
-//
-//	  protected void fireMailGun(final MultivaluedMap<String, String> postData) {
-//	      this.createPrivateClient().path("YOUR_DOMAIN/messages")
-//	                                .request()
-//	                                .post(Entity.form(postData));
-//	  }
+
 		
-	// view customer
+	      // View all customers
 		
-		public static String viewListOfCustomers() throws SQLException{
-			List <CustomerModal> customers = new ArrayList<> ();
+		  public static String viewListOfCustomers() throws SQLException{
 			
-			 String query =CustomerConstants.VIEWCUSTOMER;
-			  Connection connection = null;
-			try {
-				connection = CustomerDBConnection.getConnection();
-			} catch (ClassNotFoundException e) {
+			      List <CustomerModal> customers = new ArrayList<> ();
+			      String query =CustomerConstants.VIEWCUSTOMER;
+			       Connection connection = null;
+			      try {
+				      connection = CustomerDBConnection.getConnection();
+			       } catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			  PreparedStatement preparedStatement = connection.prepareStatement(query);
-			  System.out.println(connection.prepareStatement(query));
-			  ResultSet rs = preparedStatement.executeQuery();
-			  String output = "<h1>Customer Details</h1>";
-			  output += "<table border='1'>";
-		        output += "<tr>\r\n"
+				      e.printStackTrace();
+			       }
+			      PreparedStatement preparedStatement = connection.prepareStatement(query);
+			      System.out.println(connection.prepareStatement(query));
+			      ResultSet rs = preparedStatement.executeQuery();
+			      
+			      String output = "<h1>Customer Details</h1>";
+			      output += "<table border='1'>";
+		          output += "<tr>\r\n"
 		        		+ "    <th>First Name</th>\r\n"
 		        		+ "    <th>Last Name</th>\r\n"
 		        		+ "    <th>NIC</th>\r\n"
+		        		+ "    <th>Email</th>\r\n"
 		        		+ "    <th>Street</th>\r\n"
 		        		+ "    <th>State</th>\r\n"
 		        		+ "    <th>Postal Code</th>\r\n"
-		        		+ "    <th>Status</th>\r\n"
 		        		+ "  </tr>";
 			  
-			  while(rs.next()) {
-				  output += "<tr>";
-				  output += "<td>"+ rs.getString(1)+"</td>";
-				  output += "<td>"+ rs.getString(2)+"</td>";
-				  output += "<td>"+ rs.getString(3)+"</td>";
-				  output += "<td>"+ rs.getString(4)+"</td>";
-				  output += "<td>"+ rs.getString(5)+"</td>";
-				  output += "<td>"+ rs.getString(6)+"</td>";
-				  output += "<td>"+ rs.getString(7)+"</td>";
-				  output += "<td>"+ rs.getBoolean(8)+"</td>";
-				  output += "</tr>";
-				 
-//				  customers.add(new CustomerModal(firstName,lastName,nic,email,street,state,postalCode,status));
-//				  System.out.println( customers.add(new CustomerModal(firstName,lastName,nic,email,street,state,postalCode,status)))
+			      while(rs.next()) {
+				      output += "<tr>";
+				      output += "<td>"+ rs.getString(1)+"</td>";
+				      output += "<td>"+ rs.getString(2)+"</td>";
+				      output += "<td>"+ rs.getString(3)+"</td>";
+				      output += "<td>"+ rs.getString(4)+"</td>";
+				      output += "<td>"+ rs.getString(5)+"</td>";
+				      output += "<td>"+ rs.getString(6)+"</td>";
+				      output += "<td>"+ rs.getString(7)+"</td>";
+				      output += "</tr>";
+		
 			  }
 			  
 			  output += "</table>";
-			return output;
-			
-			
-		}
+			  return output;
+			}
+		  
+		  
 		
-		// get one customer
-		   public static String selectCustomer( int id) throws SQLException {
-			   CustomerModal customer = null;
-		    	  
-		    	  
-		    		     // calling the DBconnection 
-			   String query =CustomerConstants.GETONECUSTOMER;
-				  Connection connection = null;
+		    // Get One Customer Details
+		  public static CustomerModal selectCustomer( int id) throws SQLException {
+			    CustomerModal customer = null;
+		    	String query =CustomerConstants.GETONECUSTOMER;
+				Connection connection = null;
 				try {
 					connection = CustomerDBConnection.getConnection();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
-				  PreparedStatement preparedStatement = connection.prepareStatement(query);
-				  preparedStatement.setInt(1,id);
-		    		      ResultSet rs = preparedStatement.executeQuery();
-		    		      String output = "<h1>Customer Details</h1>";
-		    			  output += "<table border='1'>";
-		    		        output += "<tr>\r\n"
-		    		        		+ "    <th>First Name</th>\r\n"
-		    		        		+ "    <th>Last Name</th>\r\n"
-		    		        		+ "    <th>NIC</th>\r\n"
-		    		        		+ "    <th>Street</th>\r\n"
-		    		        		+ "    <th>State</th>\r\n"
-		    		        		+ "    <th>Postal Code</th>\r\n"
-		    		        		+ "    <th>Status</th>\r\n"
-		    		        		+ "  </tr>";
-		    		    while(rs.next()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1,id);
+		        ResultSet rs = preparedStatement.executeQuery();
+		    		    
+		         while(rs.next()) {
 		    		    	
-		    		    	output += "<tr>";
-		  				  output += "<td>"+ rs.getString(1)+"</td>";
-		  				  output += "<td>"+ rs.getString(2)+"</td>";
-		  				  output += "<td>"+ rs.getString(3)+"</td>";
-		  				  output += "<td>"+ rs.getString(4)+"</td>";
-		  				  output += "<td>"+ rs.getString(5)+"</td>";
-		  				  output += "<td>"+ rs.getString(6)+"</td>";
-		  				  output += "<td>"+ rs.getString(7)+"</td>";
-		  				  output += "<td>"+ rs.getBoolean(8)+"</td>";
-		  				  int uid = rs.getInt("id");
-		  				  output += "</tr>";
-		    		    	
-		    		    	
-		    		    	
-//		    		    	customer = new CustomerModal(id,firstName, lastName,NIC,email,Street,state,postalCode,status);
-		    		    }
+		    		  String firstName =  rs.getString("firstName");
+		  	          String lastName = rs.getString("lastName");
+		  			  String nic = rs.getString("nic");
+		  			  String email = rs.getString("email");
+		  			  String street = rs.getString("street");
+		  			  String state = rs.getString("state");
+		  			  String postalCode = rs.getString("postalCode");
+		  			  int uid = rs.getInt("id");
+		  				 
+		    		  customer = new CustomerModal(id,firstName,lastName,nic,email,street,state,postalCode);
+		    	  }
 		    	  
-		    		    output += "</table>";	  
-				return output;
+		    	 return customer;
 		    	 
-		    	     
 		     }
 		   
 		   
 		   
-		   // update customer
-		   public static  boolean updateCustomer(CustomerModal customer) throws SQLException {
+		   // Update Customer 
+		  
+		   public static  String updateCustomer(CustomerModal customer) throws SQLException {
+			     String result ="";
 		         boolean rowUpdated = false;
-		         
-		        	 
-		         
 		         String query =CustomerConstants.UPDATECUSTOMER;
-				  Connection connection = null;
-				try {
+				 Connection connection = null;
+				 try {
 					connection = CustomerDBConnection.getConnection();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -264,23 +213,27 @@ public class CustomerController {
 				  preparedStatement.setString(5,customer.getStreet());
 				  preparedStatement.setString(6,customer.getState());
 				  preparedStatement.setString(7,customer.getPostalCode());
-				  preparedStatement.setBoolean(8,customer.isStatus());
+				  preparedStatement.setString(8, customer.getRole());
 		            
 				  preparedStatement.setInt(9, customer.getId());
 
 		             rowUpdated = preparedStatement.executeUpdate() > 0;//return number of rows updated
-		             System.out.println(rowUpdated);
-		         return rowUpdated;
+		             
+		             if(rowUpdated) {
+		            	 return result= "Update process success!";
+		             }else {
+		            	 return result =" Update error occur!";
+		             }
+		         
 		     }
 		   
 		   
 		   //Delete customer
 		   
-		   public static boolean deleteCustomer(int id) throws SQLException {
-		         boolean rowDeleted = false;
-		        
-		        	 
-		         String query =CustomerConstants.DELETECUSTOMER;
+		   public static String deleteCustomer(int id) throws SQLException {
+			     String result = "";
+			     boolean rowDeleted = false;
+		          String query =CustomerConstants.DELETECUSTOMER;
 				  Connection connection = null;
 				try {
 					connection = CustomerDBConnection.getConnection();
@@ -292,36 +245,19 @@ public class CustomerController {
 		        	
 				  preparedStatement.setInt(1,id);
 					//use to update the query
-		             rowDeleted = preparedStatement.executeUpdate() > 0;//return number of rows deleted
-		              System.out.println(rowDeleted);
-		         return rowDeleted;
+		          rowDeleted = preparedStatement.executeUpdate() > 0;//return number of rows deleted
+		          
+		          if(rowDeleted == true) {
+		        	  return result = " Row deleted Successfully";
+		          }else {
+		        	  return result = " Error occur while deleting customer";
+		          }
+		              
+		         
 		     }
 		   
-		   private static boolean isExistingEmail(String email) {
-			   List <CustomerModal> customers = new ArrayList<> ();
-				
-		        // Iterates all the customer
-		        for (CustomerModal customer: customers) {
-		            // Checks if the customer email is equal to the email parameter
-		            if (customer.email.equals(email)) {
-		                return true;
-		            }
-		        }
-		        return false;
-		    }
-		   
-		   private static boolean isExistingCustomerId(int id) {
-			   List <CustomerModal> customers = new ArrayList<> ();
-				
-		        // Iterates all the customer
-		        for (CustomerModal customer: customers) {
-		            // Checks if the customer email is equal to the email parameter
-		            if (customer.id == id) {
-		                return true;
-		            }
-		        }
-		        return false;
-		    }
+		
+		
 		   
 		   public static String generateRandomPassword(int len)
 		    {
@@ -349,6 +285,12 @@ public class CustomerController {
 
 	private static void printSQLException(SQLException e) {
 		// TODO Auto-generated method stub
+		CustomerModal customer = new CustomerModal();
+		customer.setStatus(true);
+		customer.setCreateBy(1);
+		customer.setCreatedDate("2021-9-10");
+		customer.setModifiedDate("2021-6-5");
+		customer.setModifiedBy(1);
 		
 	}
 		
