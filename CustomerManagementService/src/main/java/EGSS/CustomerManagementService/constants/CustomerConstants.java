@@ -3,12 +3,12 @@ package EGSS.CustomerManagementService.constants;
 public class CustomerConstants {
 	
 	public static String ADDTOCUSTOMER = "insert  into  customer(id,firstName,lastName,nic,email,street,state,postalCode,status,createBy,createDate,modifiedBy,modifiedDate,role) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    public static String VIEWCUSTOMER = "select firstName, lastName,nic,email,street, state, postalCode , status  from powergriddb.customer";
+    public static String VIEWCUSTOMER = "select firstName, lastName,nic,email,street, state, postalCode from powergriddb.customer";
     public static String GETONECUSTOMER ="select * from powergriddb.customer where id=?";
-    public static String UPDATECUSTOMER ="update customer set firstName= ?,lastName=?,nic=?,email=?,street=?,state=?,postalCode=?,status=? where id=?";
+    public static String UPDATECUSTOMER ="update customer set firstName= ?,lastName=?,nic=?,email=?,street=?,state=?,postalCode=?,role=? where id=?";
     public static String DELETECUSTOMER = "delete from customer where id=?";
     public static String GETAUTHDETAILS ="select id  from customer order by id desc limit 1 ";
-    public static String INSERTAUTHDATA ="insert into user(uid,password,id)values(?,?,?)";
+    public static String INSERTAUTHDATA ="insert into user(id,password,uid)values(?,?,?)";
     public static String LOGUSER = "select c.id ,c.email,u.password,c.role from user u , customer c where c.email=? and u.password=?";
     
     public static int INDEX_ONE  =  1;

@@ -27,6 +27,8 @@ import EGSS.CustomerManagementService.modal.CustomerModal;
 
 @Path("customer")
 public class CustomerResources {
+	
+	// Login API
 	@Path("/login")
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -34,14 +36,13 @@ public class CustomerResources {
 		return Response.status(Status.CREATED).entity(LoginController.loginUser(customer.getEmail(), customer.getPassword())).build();
 	}
 	
-    // Post method to add customer to DB
-	
+    
+	// Customer Inserting API
     @POST
     @Produces({MediaType.APPLICATION_JSON})
-//    @Consumes({MediaType.APPLICATION_JSON})
     public Response addCus(CustomerModal customer) throws ClassNotFoundException, SQLException {
    	 System.out.println(customer);
-   	 CustomerModal addCustomerToDB = CustomerController.addCustomer(customer);
+   	 String addCustomerToDB = CustomerController.addCustomer(customer);
    	 if(addCustomerToDB != null) {
    		 return Response.status(Status.CREATED).entity(addCustomerToDB).build();
    	 }
@@ -51,13 +52,16 @@ public class CustomerResources {
    	 
    }
     
+    
+    
+    // Retriving list of customers
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getAllCustomers() throws ClassNotFoundException, SQLException{
     
-//    	
+  	
     	if(CustomerController.viewListOfCustomers().isEmpty()) {
-    		return Response.status(Status.NOT_FOUND).entity("No Products founds").build();
+    		return Response.status(Status.NOT_FOUND).entity("No Customers founds").build();
     	}
     	else {
     		return Response.status(Status.ACCEPTED).entity(CustomerController.viewListOfCustomers()).build();
@@ -66,16 +70,15 @@ public class CustomerResources {
 	}
     
     
-//    //get auth
+     // Get Id for authorization
     @Path("Auth/getAuth")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getAuthDetails() throws ClassNotFoundException, SQLException{
     
-//    	
-    	if(CustomerController.getAuthData().isEmpty()) {
-//    		System.out.println()
-    		return Response.status(Status.NOT_FOUND).entity("No Products founds").build();
+ 	  if(CustomerController.getAuthData().isEmpty()) {
+   		
+    		return Response.status(Status.NOT_FOUND).entity("No id founds").build();
     	}
     	else {
     		return Response.status(Status.ACCEPTED).entity(CustomerController.getAuthData()).build();
@@ -83,14 +86,14 @@ public class CustomerResources {
     	
 	}
     
-    //insert auth
+    // Generate Random Password
     @Path("Auth/insertAuth")
     @POST
     @Produces({MediaType.APPLICATION_JSON})
-//    @Consumes({MediaType.APPLICATION_JSON})
+
     public Response insertAuth(CustomerModal customer) throws ClassNotFoundException, SQLException {
    	 System.out.println(customer);
-   	 CustomerModal insertCustomerauth = CustomerController.insertAuthData(customer);
+   	 String insertCustomerauth = CustomerController.insertAuthData(customer);
    	 if(insertCustomerauth != null) {
    		 return Response.status(Status.CREATED).entity(insertCustomerauth).build();
    	 }
@@ -101,12 +104,13 @@ public class CustomerResources {
    }
     
     
+    // Delete Customer Record
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response DeleteCustomer(@PathParam("id") int id) throws SQLException{
     	try {
-			if(CustomerController.deleteCustomer(id)) {
+			if(CustomerController.deleteCustomer(id) != null) {
 				return Response.status(Status.OK).entity(id).build();
 			}
 			
@@ -119,14 +123,13 @@ public class CustomerResources {
     	
 	}
     
+    
+    // Get One Customer API
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getOneCustomer(@PathParam("id")int id) throws ClassNotFoundException, SQLException{
         
-    	
-    	  
-    	 
     	if(CustomerController.selectCustomer(id) != null) {
     		return Response.status(Status.ACCEPTED).entity(CustomerController.selectCustomer(id)).build();
     	}
@@ -136,12 +139,14 @@ public class CustomerResources {
 	}
     
     
+    // Update Customer API
+    
     @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-	public Response UpdateProduct(@PathParam("id") int id, CustomerModal customerModal) throws SQLException{
+	public Response UpdateCus(@PathParam("id") int id, CustomerModal customerModal) throws SQLException{
     	customerModal.setId(id);
-    	if(CustomerController.updateCustomer(customerModal)) {
+    	if(CustomerController.updateCustomer(customerModal) != null) {
     		return Response.status(Status.ACCEPTED).entity(CustomerController.updateCustomer(customerModal)).build();
     	}
     	
