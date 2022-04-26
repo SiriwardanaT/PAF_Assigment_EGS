@@ -118,7 +118,7 @@ public class ComplaintService {
 			int res = preparedStatement.executeUpdate();
 	
 			if(res == 1) {
-				return output = "updated Successfully";
+				return output = "Updated Successfully";
 			}
 			else {
 				return output = "Error:occoured";
