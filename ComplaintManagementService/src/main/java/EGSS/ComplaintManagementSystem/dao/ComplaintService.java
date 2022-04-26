@@ -17,7 +17,7 @@ public class ComplaintService {
 		Connection con = dbConnection.getdbConnection();
 
 }
-	// Add Complaint
+	
 	
 	public static String AddComplaint(Complaint complaint) throws ClassNotFoundException, SQLException {
 		String output = "";
@@ -105,16 +105,26 @@ public class ComplaintService {
 		}
 	}
 
-//	public static String updateComplaint(Complaint complaint, String Id) throws ClassNotFoundException, SQLException {
-//		Connection con = dbConnection.getdbConnection();
-//		if(con == null) {
-//			return Constant.ConnectionERR;
-//		}
-//		else {
-//			PreparedStatement preparedStatement =  con.prepareStatement("update consumption set  ");
-//			
-//		}
-//	}
+	public static String updateComplaint(Complaint complaint, String Id) throws ClassNotFoundException, SQLException {
+		Connection con = dbConnection.getdbConnection();
+		String output = "";
+		if(con == null) {
+			return Constant.ConnectionERR;
+		}
+		else {
+			PreparedStatement preparedStatement =  con.prepareStatement("update consumption set status = ?    ");
+			preparedStatement.setInt(1, complaint.getStatus());
+	
+			int res = preparedStatement.executeUpdate();
+	
+			if(res == 1) {
+				return output = "updated Successfully";
+			}
+			else {
+				return output = "Error:occoured";
+	}
+		}
+	
 
 
-}
+}}

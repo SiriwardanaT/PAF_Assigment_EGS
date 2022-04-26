@@ -29,17 +29,17 @@ public class ComplaintController {
 		return "Hello";
 	}
 
-//	@POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String AddNewConsupmtion(Complaint complaint) throws ClassNotFoundException, SQLException {
-//    	if(complaint != null) {
-//    		return ComplaintService.AddComplaint(complaint);
-//    	}
-//    	else {
-//    		return "Something went wrong !";
-//    	}
-//    	
-//    }
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public String AddNewConsupmtion(Complaint complaint) throws ClassNotFoundException, SQLException {
+   	if(complaint != null) {
+   		return ComplaintService.AddComplaint(complaint);
+    	}
+    	else {
+    		return "Something went wrong !";
+    	}
+    	
+    }
 	
  	
     @GET
