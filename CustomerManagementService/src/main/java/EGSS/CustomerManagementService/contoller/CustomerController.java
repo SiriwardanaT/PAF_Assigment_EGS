@@ -232,7 +232,7 @@ public class CustomerController {
 		   
 		   public static String deleteCustomer(int id) throws SQLException {
 			     String result = "";
-			     boolean rowDeleted = false;
+			     int rowDeleted;
 		          String query =CustomerConstants.DELETECUSTOMER;
 				  Connection connection = null;
 				try {
@@ -245,9 +245,9 @@ public class CustomerController {
 		        	
 				  preparedStatement.setInt(1,id);
 					//use to update the query
-		          rowDeleted = preparedStatement.executeUpdate() > 0;//return number of rows deleted
-		          
-		          if(rowDeleted == true) {
+		          rowDeleted = preparedStatement.executeUpdate();//return number of rows deleted
+		          System.out.println(rowDeleted);
+		          if(rowDeleted == 1) {
 		        	  return result = " Row deleted Successfully";
 		          }else {
 		        	  return result = " Error occur while deleting customer";

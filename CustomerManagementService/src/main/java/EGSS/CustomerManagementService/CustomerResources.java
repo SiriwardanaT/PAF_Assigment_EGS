@@ -110,9 +110,11 @@ public class CustomerResources {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response DeleteCustomer(@PathParam("id") int id) throws SQLException{
     	try {
-			if(CustomerController.deleteCustomer(id) != null) {
-				return Response.status(Status.OK).entity(id).build();
-			}
+    		
+			
+//				return Response.status(Status.OK).entity(id).build();
+				return Response.status(Status.ACCEPTED).entity(CustomerController.deleteCustomer(id)).build();
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

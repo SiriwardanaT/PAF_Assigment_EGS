@@ -33,6 +33,7 @@ public class JwtTokenService {
     
     public static String getJWTToken(int id , String role) throws InvalidKeyException, NoSuchAlgorithmException {
     	String payload = role +"/"+ id;
+    	System.out.println(payload);
     	return createheader() + "." + CreatePayload(payload) +"."+ GenerateSignature("thththt");
     }
 
