@@ -33,7 +33,13 @@ public class CustomerResources {
     @POST
     @Produces({MediaType.APPLICATION_JSON})
 	public Response Login(CustomerModal customer) throws ClassNotFoundException, SQLException, InvalidKeyException, NoSuchAlgorithmException {
-		return Response.status(Status.CREATED).entity(LoginController.loginUser(customer.getEmail(), customer.getPassword())).build();
+		String result = LoginController.loginUser(customer.getEmail(), customer.getPassword());
+		if(result != null) {
+			return Response.status(Status.CREATED).entity(LoginController.loginUser(customer.getEmail(), customer.getPassword())).build();
+		}else {
+			 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(null).build();
+		}
+		
 	}
 	
     

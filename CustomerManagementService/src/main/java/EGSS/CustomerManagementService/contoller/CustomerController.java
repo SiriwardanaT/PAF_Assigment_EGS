@@ -8,17 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MultivaluedMap;
-
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-
+import EGSS.CustomerManagementService.constants.CustomerConstants;
 import EGSS.CustomerManagementService.modal.CustomerModal;
 import EGSS.CustomerManagementService.utils.CustomerDBConnection;
-import EGSS.CustomerManagementService.constants.CustomerConstants;
+
+
 
 public class CustomerController {
 	
