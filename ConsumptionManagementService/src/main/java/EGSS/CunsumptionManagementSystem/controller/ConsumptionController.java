@@ -24,7 +24,14 @@ public class ConsumptionController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getIt() {
 		try {
-			return Response.status(Status.OK).entity(ConsumptionService.getAllConsumptions()).build();
+			int statusCode = ConsumptionService.getAllConsumptions().getStatuscode();
+			if(statusCode == 200) {
+				return Response.status(Status.OK).entity(ConsumptionService.getAllConsumptions().getOutput()).build();
+			}
+			else {
+				return Response.status(Status.OK).entity("Data display faild").build();
+			}
+			
 		} catch (ClassNotFoundException e) {
 			return Response.status(Status.NOT_FOUND).entity("Not Found Class").build();
 
@@ -44,6 +51,7 @@ public class ConsumptionController {
 				return Response.status(Status.NOT_FOUND).entity("Not Found Class").build();
 
 			} catch (SQLException e) {
+				System.out.println(e);
 				return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Database ERR or Duplication Error ").build();
 			}
 		} else {

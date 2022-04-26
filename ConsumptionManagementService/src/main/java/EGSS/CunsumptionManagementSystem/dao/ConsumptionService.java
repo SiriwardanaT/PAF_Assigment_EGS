@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 
 import EGSS.CunsumptionManagementSystem.modal.Consumption;
+import EGSS.CunsumptionManagementSystem.modal.ResponseResult;
 import EGSS.CunsumptionManagementSystem.utils.Constant;
 import EGSS.CunsumptionManagementSystem.utils.DbConnection;
 
@@ -17,7 +18,7 @@ public class ConsumptionService {
 		//get all consumption records
 	}
 	
-	public static String getAllConsumptions() throws ClassNotFoundException, SQLException {
+	public static ResponseResult getAllConsumptions() throws ClassNotFoundException, SQLException {
 		Connection con = DbConnection.getDbConnection();
 		PreparedStatement preparedStatement = con.prepareStatement("select * from consumption");
 		
@@ -52,16 +53,18 @@ public class ConsumptionService {
 			output += "</tr>";
 		}
 		output += "</table>";
-		return output;
+		ResponseResult responseResult = new ResponseResult(output,200);
+		return responseResult;
 	}
 	
 	
 	//Add Consumption record
-	public static String AddConsmptionRecord(Consumption consumption) throws ClassNotFoundException, SQLException {
+	public static ResponseResult AddConsmptionRecord(Consumption consumption) throws ClassNotFoundException, SQLException {
 		String output = "";
 		Connection con = DbConnection.getDbConnection();
 		if(con == null) {
-			return Constant.ConnectionERR;
+			ResponseResult responseResult = new ResponseResult(Constant.ConnectionERR,500);
+			return responseResult;
 		}
 		else {
 			int lastReading = getLastReading(consumption.getMacc());
@@ -82,14 +85,21 @@ public class ConsumptionService {
 				boolean res = preparedStatement.execute();
 				
 				if(!res) {
-					return output  = "Record Added Successfully for the ACC:" + consumption.getMacc();
+					output  = "Record Added Successfully for the ACC:" + consumption.getMacc();
+					ResponseResult responseResult = new ResponseResult(output,201);
+					return responseResult;
+					 
 				}
 				else {
-					return output  = "Invalid Record Insertion";
+					output  = "Invalid Record Insertion";
+					ResponseResult responseResult = new ResponseResult(output,500);
+					return responseResult;
 				}
 			}
 			else {
-				return output  = "Currunt reading Cannot be less that last reading ";
+				output  = "Currunt reading Cannot be less that last reading ";
+				ResponseResult responseResult = new ResponseResult(output,500);
+				return responseResult;
 			}
 		
 			
@@ -205,19 +215,6 @@ public class ConsumptionService {
 	
 	
 	public static void main(String [] args) throws ClassNotFoundException, SQLException {
-		Consumption consumption = new Consumption();
-//		consumption.setUnits(800.99);
-		consumption.setUnitPrice(600.00);
-		consumption.setStatus(1);
-//		consumption.setModifiedDate("2021-6-5");
-//		consumption.setModifiedBy(1);
-//		consumption.setMacc("AC4000");
-//		consumption.setDate("2021-6-5");
-//		consumption.setCurruntReading(234);
-//		consumption.setCreateDate("2021-5-5");
-//		consumption.setCreateBy(1);
-		String out = AddConsmptionRecord(consumption);
-		System.out.println(getLastReading("AC3000"));
-		System.out.println(updateConsumption(consumption,17));
+
 	}
 }

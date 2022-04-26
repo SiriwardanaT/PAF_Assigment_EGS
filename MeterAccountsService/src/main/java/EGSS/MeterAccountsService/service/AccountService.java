@@ -47,6 +47,7 @@ public class AccountService {
 			output += "<th>"+rs.getString(2) +"</th>";
 			output += "<th>"+rs.getString(3) +"</th>";
 			output += "<th >"+InterCommunication.getCustomer(Integer.parseInt(rs.getString(4))).getLastName()+"</th>";
+			output += "<th >"+InterCommunication.getCustomer(Integer.parseInt(rs.getString(4))).getNic()+"</th>";
 			output += "</tr>";
 		}
 		output += "</table>";
